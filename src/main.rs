@@ -144,7 +144,7 @@ struct Chat {
     invite_link: String,
     #[serde(default)]
     pinned_message: Message,
-    #[serde(defualt)]
+    #[serde(default)]
     sticker_set_name: String,
     #[serde(default)]
     can_set_sticker_set: bool,
@@ -265,6 +265,146 @@ struct File {
     #[serde(default)]
     file_path: String,
 }
+
+struct ReplyKeyboardMarkup {
+    keyboard: Vec<Vec<KeyboardButton>>,
+    #[serde(default)]
+    resize_keyboard: bool,
+    #[serde(default)]
+    one_time_keyboard: bool,
+    #[serde(default)]
+    selective: bool,
+}
+
+struct KeyboardButton {
+    text: String,
+    #[serde(default)]
+    request_contact: bool,
+    #[serde(default)]
+    request_location: bool,
+}
+
+struct ReplyKeyboardRemove {
+    remove_keyboard: bool,
+    #[serde(default)]
+    selective: bool,
+}
+
+struct InlineKeyboardMarkup {
+    inline_keyboard: Vec<Vec<InlineKeyboardButton>>,
+}
+
+struct InlineKeyboardButton {
+    text: String,
+    #[serde(default)]
+    url: String,
+    #[serde(default)]
+    callback_data: String,
+    #[serde(default)]
+    switch_inline_query: String,
+    #[serde(default)]
+    switch_inline_query_current_chat: String,
+    #[serde(default)]
+    callback_game: CallbackGame,
+    #[serde(default)]
+    pay: bool,
+}
+
+struct CallbackQuery {
+    id: String,
+    from: User,
+    #[serde(default)]
+    message: Message,
+    #[serde(default)]
+    inline_message_id: String,
+    #[serde(default)]
+    chat_instance: String,
+    #[serde(derive)]
+    data: String,
+    #[serde(default)]
+    game_short_name: String,
+}
+
+struct ForceReply {
+    force_reply: bool,
+    #[serde(default)]
+    selective: bool,
+}
+
+struct ChatPhoto {
+    small_file_id: String,
+    big_file_id: String,
+}
+
+struct ChatMember {
+    user: User,
+    status: String,
+    #[serde(default)]
+    until_date: u32,
+    #[serde(default)]
+    can_be_edited: bool,
+    #[serde(default)]
+    can_change_info: bool,
+    #[serde(default)]
+    can_post_messages: bool,
+    #[serde(default)]
+    can_edit_messages: bool,
+    #[serde(default)]
+    can_delete_messages: bool,
+    #[serde(default)]
+    can_invite_users: bool,
+    #[serde(default)]
+    can_restrict_members: bool,
+    #[serde(default)]
+    can_pin_messages: bool,
+    #[serde(default)]
+    can_promote_members: bool,
+    #[serde(default)]
+    can_send_messages: bool,
+    #[serde(default)]
+    can_send_media_messages: bool,
+    #[serde(default)]
+    can_send_other_messages: bool,
+    #[serde(default)]
+    can_add_web_pae_previews: bool,
+}
+
+struct ResponseParameters {
+    #[serde(default)]
+    migrate_to_chat_id: u32,
+    #[serde(default)]
+    retry_after: u32,
+}
+
+struct InputMediaPhoto {
+    type: String,
+    media: String,
+    #[serde(default)]
+    caption: String,
+    #[serde(default)]
+    parse_mode: String,
+}
+
+struct InputMediaVideo {
+    type: String,
+    media: String,
+    #[serde(default)]
+    caption: String,
+    #[serde(default)]
+    parse_mode: String,
+    #[serde(default)]
+    width: u32,
+    #[serde(default)]
+    height: u32,
+    #[serde(default)]
+    duration: u32,
+    #[serde(default)]
+    supports_streaming: bool,
+}
+
+struct InputFile {
+}
+
 
 
 
