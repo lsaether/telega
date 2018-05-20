@@ -9,8 +9,8 @@ use std::io::Read;
 
 use serde_json::Value;
 
-mod types;
-use types::*;
+extern crate telega;
+use telega::types;
 
 fn main() {
     let bot_token = "547846290:AAFwQk6rAO7_77Yn1aEF5CLojLoIP12jhYs";

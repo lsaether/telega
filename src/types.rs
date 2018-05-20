@@ -2,12 +2,8 @@ extern crate reqwest;
 extern crate serde;
 extern crate serde_json;
 
-#[macro_use]
-extern crate serde_derive;
-
-
 /// User type
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct User {
     id: u32,
     is_bot: bool,
@@ -20,23 +16,23 @@ pub struct User {
     language_code: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct ChatPhoto {
     small_file_id: String,
     big_file_id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Message {
     message_id: u32,
     #[serde(default)]
     from: User,
     date: u32,
-    chat: Chat,
+    chat: Box<Chat>,
     #[serde(default)]
     forward_from: User,
     #[serde(default)]
-    forward_from_chat: Chat,
+    forward_from_chat: Box<Chat>,
     #[serde(default)]
     forward_from_message_id: u32,
     #[serde(default)]
@@ -44,7 +40,7 @@ pub struct Message {
     #[serde(default)]
     forward_date: u32,
     #[serde(default)]
-    reply_to_message: Message,
+    reply_to_message: Box<Message>,
     #[serde(default)]
     edit_date: u32,
     #[serde(default)]
@@ -100,7 +96,7 @@ pub struct Message {
     #[serde(default)]
     migrate_from_chat_id: u32,
     #[serde(default)]
-    pinned_message: Message,
+    pinned_message: Box<Message>,
     #[serde(default)]
     invoice: Invoice,
     #[serde(default)]
@@ -109,10 +105,11 @@ pub struct Message {
     connected_website: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Chat {
     id: u32,
-    type: String,
+    #[serde(rename = "type")]
+    json_type: String,
     #[serde(default)]
     title: String,
     #[serde(default)]
@@ -137,9 +134,10 @@ pub struct Chat {
     can_set_sticker_set: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct MessageEntity {
-    type: String,
+    #[serde(rename = "type")]
+    json_type: String,
     offset: u32,
     length: u32,
     #[serde(default)]
@@ -148,7 +146,7 @@ pub struct MessageEntity {
     user: User,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct PhotoSize {
     file_id: String,
     width: u32,
@@ -157,7 +155,7 @@ pub struct PhotoSize {
     file_size: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Audio {
     file_id: String,
     duration: u32,
@@ -171,7 +169,7 @@ pub struct Audio {
     file_size: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Document {
     file_id: String,
     #[serde(default)]
@@ -184,7 +182,7 @@ pub struct Document {
     file_size: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Video {
     file_id: String,
     width: u32,
@@ -198,7 +196,7 @@ pub struct Video {
     file_size: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Voice {
     file_id: String,
     duration: u32,
@@ -208,7 +206,7 @@ pub struct Voice {
     file_size: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct VideoNote {
     file_id: String,
     length: u32,
@@ -219,7 +217,7 @@ pub struct VideoNote {
     file_size: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Contact {
     phone_number: String,
     first_name: String,
@@ -229,13 +227,13 @@ pub struct Contact {
     user_id: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Location {
     longitude: f32,
     latitude: f32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct Venue {
     location: Location,
     title: String,
@@ -244,7 +242,7 @@ pub struct Venue {
     foursquare_id: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct UserProfilePhotos {
     total_count: u32,
     photos: Vec<Vec<PhotoSize>>,
@@ -256,7 +254,7 @@ pub struct UserProfilePhotos {
 /// It is guranteed that the link will be valid for at least
 /// 1 hour. When the link expires, a new once can be requested
 /// by calling `getFile`.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct File {
     file_id: String,
     #[serde(default)]
@@ -265,7 +263,7 @@ pub struct File {
     file_path: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct ReplyKeyboardMarkup {
     keyboard: Vec<Vec<KeyboardButton>>,
     #[serde(default)]
@@ -276,7 +274,7 @@ pub struct ReplyKeyboardMarkup {
     selective: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct KeyboardButton {
     text: String,
     #[serde(default)]
@@ -285,19 +283,19 @@ pub struct KeyboardButton {
     request_location: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct ReplyKeyboardRemove {
     remove_keyboard: bool,
     #[serde(default)]
     selective: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct InlineKeyboardMarkup {
     inline_keyboard: Vec<Vec<InlineKeyboardButton>>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct InlineKeyboardButton {
     text: String,
     #[serde(default)]
@@ -314,7 +312,7 @@ pub struct InlineKeyboardButton {
     pay: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct CallbackQuery {
     id: String,
     from: User,
@@ -330,20 +328,14 @@ pub struct CallbackQuery {
     game_short_name: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct ForceReply {
     force_reply: bool,
     #[serde(default)]
     selective: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct ChatPhoto {
-    small_file_id: String,
-    big_file_id: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct ChatMember {
     user: User,
     status: String,
@@ -377,7 +369,7 @@ pub struct ChatMember {
     can_add_web_pae_previews: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct ResponseParameters {
     #[serde(default)]
     migrate_to_chat_id: u32,
@@ -385,9 +377,10 @@ pub struct ResponseParameters {
     retry_after: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct InputMediaPhoto {
-    type: String,
+    #[serde(rename = "type")]
+    json_type: String,
     media: String,
     #[serde(default)]
     caption: String,
@@ -395,9 +388,10 @@ pub struct InputMediaPhoto {
     parse_mode: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct InputMediaVideo {
-    type: String,
+    #[serde(rename = "type")]
+    json_type: String,
     media: String,
     #[serde(default)]
     caption: String,
@@ -413,6 +407,26 @@ pub struct InputMediaVideo {
     supports_streaming: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Debug)]
 pub struct InputFile {
+}
+
+#[derive(Serialize, Debug)]
+pub struct Game {
+}
+
+#[derive(Serialize, Debug)]
+pub struct Sticker {
+}
+
+#[derive(Serialize, Debug)]
+pub struct Invoice {
+}
+
+#[derive(Serialize, Debug)]
+pub struct SuccessfulPayment {
+}
+
+#[derive(Serialize, Debug)]
+pub struct CallbackGame {
 }
