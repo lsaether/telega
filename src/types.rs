@@ -3,7 +3,7 @@ extern crate serde;
 extern crate serde_json;
 
 /// User type
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct User {
     id: u32,
     is_bot: bool,

@@ -49,7 +49,7 @@ impl Bot {
         }
     }
 
-    fn get_me(&self) -> Result<User, &'static str> {
+    fn get_me(&self) -> Result<types::User, &'static str> {
         let req = Bot::form_method(&self, "getMe"); 
         let res = self.reqwest_client.get(&req).send().unwrap();
         match Bot::handle_response(res) {
@@ -57,7 +57,7 @@ impl Bot {
                 let mut content = String::new();
                 res.read_to_string(&mut content).unwrap();
                 let value: Value = serde_json::from_str(&content).unwrap();
-                let me: User = serde_json::from_str(&value["result"].to_string()).unwrap();
+                let me: types::User = serde_json::from_str(&value["result"].to_string()).unwrap();
                 Ok(me)
             },
             Err(e) => Err(e),

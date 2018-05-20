@@ -5,4 +5,4 @@ extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
 
-mod types;
+pub mod types;
